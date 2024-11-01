@@ -1,0 +1,10 @@
+/*
+
+!certs
+certs/*
+!.gitignore
+!README.md
+!docker-compose.yml
+!dynamic_conf.yaml
+!traefik.yaml
+!README.md
