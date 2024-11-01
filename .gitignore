@@ -3,6 +3,7 @@
 !certs
 certs/*
 !.gitignore
+!.env.sample
 !README.md
 !docker-compose.yml
 !dynamic_conf.yaml
