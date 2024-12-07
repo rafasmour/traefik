@@ -1,20 +1,23 @@
 http:
   routers:
     traefik:
-      rule: "Host(`traefik.${DOMAIN}`)"
+      rule: "Host(`traefik.{{env "DOMAIN"}}`)"
       service: "api@internal"
-      entrypoints: websecure
+      entryPoints: 
+        - websecure
       tls: true
+
 
 tls:
   stores:
     default:
       defaultCertificate:
-        certFile: /var/traefik/certs/${CERT}
-        keyFile: /var/traefik/certs/${KEY}
+        certFile: /var/traefik/certs/{{env "CERT"}}
+        keyFile: /var/traefik/certs/{{env "KEY"}}
   options:
     myTLSOptions:
       minVersion: VersionTLS12
       maxVersion: VersionTLS13
+
 
 

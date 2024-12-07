@@ -18,3 +18,13 @@ providers:
   file:
     filename: "/etc/traefik/dynamic_conf.yaml"
     watch: true
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /var/traefik/certs/rafaelhome.mourou.gr.pem
+        keyFile: /var/traefik/certs/rafaelhome.mourou.gr.key.pem
+  options:
+    myTLSOptions:
+      minVersion: VersionTLS12
+      maxVersion: VersionTLS13

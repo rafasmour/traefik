@@ -1,5 +1,6 @@
 services:
   traefik:
+    restart: always
     image: traefik:v3.1
     container_name: traefik
     ports:
@@ -12,7 +13,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
       - ./dynamic_conf.yaml:/etc/traefik/dynamic_conf.yaml:ro
-      - ./certs:/var/traefik/certs:ro
+      - ./certs:/var/traefik/certs
 
     networks:
       - webgateway
@@ -28,4 +29,5 @@ services:
     
 networks:
   webgateway:
-    external: true
+    name: webgateway
+    driver: bridge
