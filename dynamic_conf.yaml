@@ -7,13 +7,12 @@ http:
         - websecure
       tls: true
 
-
 tls:
   stores:
     default:
       defaultCertificate:
-        certFile: /var/traefik/certs/{{env "CERT"}}
-        keyFile: /var/traefik/certs/{{env "KEY"}}
+        certFile: /var/traefik/certs/{{env "MYCERT"}}.crt
+        keyFile: /var/traefik/certs/{{env "MYCERT"}}.key
   options:
     myTLSOptions:
       minVersion: VersionTLS12

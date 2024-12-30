@@ -1,7 +1,7 @@
-/*
+*
 
-!certs
 certs/*
+!certs
 !.gitignore
 !.env.sample
 !README.md
@@ -9,3 +9,4 @@ certs/*
 !dynamic_conf.yaml
 !traefik.yaml
 !README.md
+!certs.sh
