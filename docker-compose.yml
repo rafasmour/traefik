@@ -6,15 +6,14 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+      - "8080"
     env_file:
       - ./.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
       - ./dynamic_conf.yaml:/etc/traefik/dynamic_conf.yaml:ro
-      - ./certs:/var/traefik/certs
-
+      - ./letsencrypt:/letsencrypt
     networks:
       - webgateway
   whoami:
@@ -23,9 +22,9 @@ services:
       - webgateway
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`whoami.${DOMAIN}`)
+      - traefik.http.routers.whoami.rule=HostRegexp(`whoami.${DOMAIN}`)
       - traefik.http.routers.whoami.entrypoints=websecure
-      - traefik.http.routers.whoami.tls=true
+      - traefik.http.routers.whoami.tls.certresolver=myresolver
     
 networks:
   webgateway:

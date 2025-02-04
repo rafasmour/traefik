@@ -1,22 +1,16 @@
 http:
   routers:
     traefik:
-      rule: "Host(`traefik.{{env "DOMAIN"}}`)"
+      rule: 'Host(`traefik.{{env "DOMAIN1"}}`) || Host(`traefik.{{env "DOMAIN2"}}`)'
       service: "api@internal"
       entryPoints: 
         - websecure
-      tls: true
-
-tls:
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /var/traefik/certs/{{env "MYCERT"}}.crt
-        keyFile: /var/traefik/certs/{{env "MYCERT"}}.key
-  options:
-    myTLSOptions:
-      minVersion: VersionTLS12
-      maxVersion: VersionTLS13
-
-
-
+      tls:
+        certResolver: myresolver
+      middlewares:
+        - "basic-auth"
+  middlewares:
+    basic-auth:
+      basicAuth:
+        users:
+          - '{{ env "DASH_CREDS" }}'
