@@ -5,6 +5,7 @@ This traefik setup is configured for local development only!
 
 Prequisites:
 1. Docker Engine
+2. DNS masq configured
 
 Installation Steps:
 1. Set the correct env variables and rename .env.sample to .env
