@@ -1,0 +1,16 @@
+http:
+  routers:
+    traefik:
+      rule: 'Host(`traefik.{{env "DOMAIN"}}`)'
+      service: "api@internal"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: myresolver
+      middlewares:
+        - "basic-auth"
+  middlewares:
+    basic-auth:
+      basicAuth:
+        users:
+          - '{{ env "DASH_CREDS" }}'

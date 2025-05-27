@@ -1,0 +1,32 @@
+services:
+  traefik:
+    restart: always
+    image: traefik:v3.1
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080"
+    env_file:
+      - ./.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.prod.yml:/etc/traefik/traefik.yaml:ro
+      - ./dynamic_conf.prod.yaml:/etc/traefik/dynamic_conf.yaml:ro
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - webgateway
+  whoami:
+    image: traefik/whoami
+    networks:
+      - webgateway
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.rule=HostRegexp(`whoami.${DOMAIN}`)
+      - traefik.http.routers.whoami.entrypoints=websecure
+      - traefik.http.routers.whoami.tls.certresolver=myresolver
+
+networks:
+  webgateway:
+    name: webgateway
+    driver: bridge

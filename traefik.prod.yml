@@ -1,0 +1,26 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+log:
+  level: INFO
+api:
+  dashboard: true
+entryPoints:
+  web:
+    address: :80
+  websecure:
+    address: :443
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  file:
+    filename: "/etc/traefik/dynamic_conf.yaml"
+    watch: true
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: '{{env "ECMA_EMAIL"}}'
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: web

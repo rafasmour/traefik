@@ -11,8 +11,8 @@ services:
       - ./.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
-      - ./dynamic_conf.yaml:/etc/traefik/dynamic_conf.yaml:ro
+      - ./traefik.dev.yml:/etc/traefik/traefik.yaml:ro
+      - ./dynamic_conf.dev.yaml:/etc/traefik/dynamic_conf.yaml:ro
       - ./certs:/var/traefik/certs
 
     networks:
