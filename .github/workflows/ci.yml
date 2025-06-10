@@ -37,19 +37,25 @@ jobs:
           DASH_CREDS: ${{ secrets.DASH_CREDS }}
         shell: alpine.sh --root {0}
         run: |
+          eval "$(ssh-agent -s)"
+          echo -e '#!/bin/sh\necho "$SSH_PASSPHRASE"' > ./askpass.sh
+          chmod +x ./askpass.sh
+          export SSH_ASKPASS=./askpass.sh
+          export DISPLAY=:0
+          setsid ssh-add /home/runner/.ssh/id_rsa < /dev/null
           ssh -v ${USER}@${VPS_IP} << 'EOF'
           set -x
           cd /home/${USER}/ || exit 1
           if [ ! -d "traefik" ]; then
-          git clone https://github.com/rafasmour/traefik.git || exit 1
+            git clone https://github.com/rafasmour/traefik.git || exit 1
           fi
           cd traefik || exit 1
           git pull || exit 1
           if [ ! -f ".env" ]; then
-          touch .env
-          echo "DOMAIN=${DOMAIN}" >> .env
-          echo "DASH_CREDS=${DASH_CREDS}" >> .env
-          echo "ECMA_EMAIL=${EMAIL}" >> .env
+            touch .env
+            echo "DOMAIN=${DOMAIN}" >> .env
+            echo "DASH_CREDS=${DASH_CREDS}" >> .env
+            echo "ECMA_EMAIL=${EMAIL}" >> .env
           fi
           docker compose -f docker-compose.prod.yml down --remove-orphans || exit 1
           docker compose -f docker-compose.prod.yml up -d --build --force-recreate || exit 1
