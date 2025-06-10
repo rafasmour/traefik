@@ -1,0 +1,61 @@
+name: deploy
+
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Alpine
+        uses: jirutka/setup-alpine@v1
+        with:
+          branch: "v3.18"
+          packages: >
+            openssh
+
+      - name: Verify Alpine Release
+        run: cat /etc/alpine-release
+        shell: alpine.sh {0}
+
+      - uses: ./.github/actions/ssh
+        with:
+          host: ${{ secrets.VPS_IP }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Cache ssh key passphrase & Run Deployment
+        env:
+          SSH_PASSPHRASE: ${{ secrets.DEPLOY_SSH_PASSPHRASE }}
+          USER: ${{ secrets.USER }}
+          VPS_IP: ${{ secrets.VPS_IP }}
+          DOMAIN: ${{ secrets.DOMAIN }}
+          EMAIL: ${{ secrets.EMAIL }}
+          DASH_CREDS: ${{ secrets.DASH_CREDS }}
+        shell: alpine.sh --root {0}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo -e '#!/bin/sh\necho "$SSH_PASSPHRASE"' > ./askpass.sh
+          chmod +x ./askpass.sh
+          export SSH_ASKPASS=./askpass.sh
+          export DISPLAY=:0
+          setsid ssh-add /home/runner/.ssh/id_rsa < /dev/null
+          ssh ${USER}@${VPS_IP}
+          ssh ${USER}@${VPS_IP} << 'EOF'
+            cd /home/${USER}/
+            if [ ! -d "traefik"]; then
+              git clone https://github.com/rafasmour/traefik.git
+            fi
+            cd traefik
+            git pull
+            if [ ! -f ".env" ]; then
+              touch .env
+              echo "DOMAIN=${DOMAIN}" >> .env
+              echo "DASH_CREDS=${DASH_CREDS}" >> .env
+              echo "ECMA_EMAIL=${EMAIL}" >> .env
+            fi
+            docker compose -f docker-compose.prod.yml down --remove-orphans
+            docker compose -f docker-compose.prod.yml up -d --build --force-recreate
