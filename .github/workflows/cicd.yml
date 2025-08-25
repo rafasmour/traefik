@@ -14,7 +14,7 @@ jobs:
       - name: Setup Alpine
         uses: jirutka/setup-alpine@v1
         with:
-          branch: "v3.18"
+          branch: "v3.19"
           packages: >
             openssh
 
@@ -42,7 +42,7 @@ jobs:
           chmod +x ./askpass.sh
           export SSH_ASKPASS=./askpass.sh
           export DISPLAY=:0
-          ssh-add /home/runner/.ssh/id_rsa < /dev/null
+          setsid ssh-add /home/runner/.ssh/id_rsa < /dev/null
           ssh -v ${USER}@${VPS_IP} << 'EOF'
           set -x
           cd /home/${USER}/ || exit 1
