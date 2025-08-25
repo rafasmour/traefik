@@ -43,7 +43,7 @@ jobs:
           export SSH_ASKPASS=./askpass.sh
           export DISPLAY=:0
           setsid ssh-add /home/runner/.ssh/id_rsa < /dev/null
-          ssh -v ${USER}@${VPS_IP} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -v ${USER}@${VPS_IP} << 'EOF'
           set -x
           cd /home/${USER}/ || exit 1
           if [ ! -d "traefik" ]; then
