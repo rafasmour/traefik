@@ -12,7 +12,6 @@ certs/*
 !dynamic_conf.prod.yaml
 !traefik.dev.yml
 !traefik.prod.yml
-!README.md
 !certs.sh
 !.github
 !.github/**/*
