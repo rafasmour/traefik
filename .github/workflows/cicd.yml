@@ -53,9 +53,9 @@ jobs:
           git pull || exit 1
           rm .env
           touch .env
-          echo "DOMAIN=${DOMAIN}" >> .env
-          echo "DASH_CREDS=${DASH_CREDS}" >> .env
-          echo "ECMA_EMAIL=${EMAIL}" >> .env
+          echo "DOMAIN=${${{ secrets.DOMAIN }}}" >> .env
+          echo "DASH_CREDS=${${{ secrets.DASH_CREDS }}}" >> .env
+          echo "ECMA_EMAIL=${${{ secrets.EMAIL }}}" >> .env
           docker compose -f docker-compose.prod.yml down --remove-orphans || exit 1
           docker compose -f docker-compose.prod.yml up -d --build --force-recreate || exit 1
           EOF
