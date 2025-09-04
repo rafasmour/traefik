@@ -51,6 +51,7 @@ jobs:
           fi
           cd traefik || exit 1
           git pull || exit 1
+          rm .env
           touch .env
           echo "DOMAIN=${DOMAIN}" >> .env
           echo "DASH_CREDS=${DASH_CREDS}" >> .env
