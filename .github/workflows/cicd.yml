@@ -43,19 +43,20 @@ jobs:
           export SSH_ASKPASS=./askpass.sh
           export DISPLAY=:0
           setsid ssh-add /home/runner/.ssh/id_rsa < /dev/null
-          ssh -o StrictHostKeyChecking=no -v ${USER}@${VPS_IP} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -v ${USER}@${VPS_IP} \
+          "DOMAIN='${DOMAIN}' DASH_CREDS='${DASH_CREDS}' EMAIL='${EMAIL}' bash -s" << 'EOF'
           set -x
           cd /home/${USER}/ || exit 1
           if [ ! -d "traefik" ]; then
-            git clone https://github.com/rafasmour/traefik.git || exit 1
+          git clone https://github.com/rafasmour/traefik.git || exit 1
           fi
           cd traefik || exit 1
           git pull || exit 1
           rm .env
           touch .env
-          echo "DOMAIN=${${{ secrets.DOMAIN }}}" >> .env
-          echo "DASH_CREDS=${${{ secrets.DASH_CREDS }}}" >> .env
-          echo "ECMA_EMAIL=${${{ secrets.EMAIL }}}" >> .env
+          echo "DOMAIN=${DOMAIN}" >> .env
+          echo "DASH_CREDS=${DASH_CREDS}" >> .env
+          echo "ECMA_EMAIL=${EMAIL}" >> .env
           docker compose -f docker-compose.prod.yml down --remove-orphans || exit 1
           docker compose -f docker-compose.prod.yml up -d --build --force-recreate || exit 1
           EOF
