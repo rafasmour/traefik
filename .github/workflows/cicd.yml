@@ -33,7 +33,7 @@ jobs:
           USER: ${{ secrets.USER }}
           VPS_IP: ${{ secrets.VPS_IP }}
           DOMAIN: ${{ secrets.DOMAIN }}
-          EMAIL: ${{ secrets.EMAIL }}
+          ECMA_EMAIL: ${{ secrets.ECMA_EMAIL }}
           DASH_CREDS: ${{ secrets.DASH_CREDS }}
         shell: alpine.sh --root {0}
         run: |
@@ -44,7 +44,7 @@ jobs:
           export DISPLAY=:0
           setsid ssh-add /home/runner/.ssh/id_rsa < /dev/null
           ssh -o StrictHostKeyChecking=no -v ${USER}@${VPS_IP} \
-          "DOMAIN='${DOMAIN}' DASH_CREDS='${DASH_CREDS}' EMAIL='${EMAIL}' bash -s" << 'EOF'
+          "DOMAIN='${DOMAIN}' DASH_CREDS='${DASH_CREDS}' ECMA_EMAIL='${ECMA_EMAIL}' bash -s" << 'EOF'
           set -x
           cd /home/${USER}/ || exit 1
           if [ ! -d "traefik" ]; then
@@ -56,7 +56,7 @@ jobs:
           touch .env
           echo "DOMAIN=${DOMAIN}" >> .env
           echo "DASH_CREDS=${DASH_CREDS}" >> .env
-          echo "ECMA_EMAIL=${EMAIL}" >> .env
+          echo "ECMA_EMAIL=${ECMA_EMAIL}" >> .env
           docker compose -f docker-compose.prod.yml down --remove-orphans || exit 1
           docker compose -f docker-compose.prod.yml up -d --build --force-recreate || exit 1
           EOF
