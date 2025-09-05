@@ -11,6 +11,7 @@ services:
       - DOMAIN=${DOMAIN}
       - ECMA_EMAIL=${ECMA_EMAIL}
       - DASH_CREDS=${DASH_CREDS}
+      - TRAEFIK_LOG_LEVEL="DEBUG"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.prod.yml:/etc/traefik/traefik.yaml:ro
