@@ -1,7 +1,7 @@
 http:
   routers:
     traefik:
-      rule: 'Host(`traefik.{{env \"DOMAIN\"}}`)'
+      rule: 'Host(`traefik.{{env "DOMAIN"}}`)'
       service: "api@internal"
       entryPoints:
         - websecure
@@ -13,4 +13,4 @@ http:
     basic-auth:
       basicAuth:
         users:
-          - '{{ env \"DASH_CREDS\" }}'
+          - '{{ env "DASH_CREDS" }}'
