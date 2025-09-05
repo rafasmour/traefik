@@ -7,8 +7,10 @@ services:
       - "80:80"
       - "443:443"
       - "8080"
-    env_file:
-      - ./.env
+    environment:
+      - DOMAIN=${DOMAIN}
+      - ECMA_EMAIL=${ECMA_EMAIL}
+      - DASH_CREDS=${DASH_CREDS}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.prod.yml:/etc/traefik/traefik.yaml:ro
