@@ -8,10 +8,8 @@ services:
       - "443:443"
       - "8080"
     labels:
-      - "traefik.enable=true"
-      - "traefik.certificatesResolvers.myresolver.acme.email=${ECMA_EMAIL}"
-      - "traefik.certificatesResolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "traefik.certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web"
+      # moved from static conf to pass email as env var
+      - '--certificatesresolvers.myresolver.acme.email=${ECMA_EMAIL}'
     environment:
       - DOMAIN=${DOMAIN}
       - ECMA_EMAIL=${ECMA_EMAIL}
