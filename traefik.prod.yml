@@ -17,10 +17,3 @@ providers:
   file:
     filename: "/etc/traefik/dynamic_conf.yaml"
     watch: true
-certificatesResolvers:
-  myresolver:
-    acme:
-      email: '{{env "ECMA_EMAIL"}}'
-      storage: /letsencrypt/acme.json
-      httpChallenge:
-        entryPoint: web
