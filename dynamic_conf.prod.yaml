@@ -14,10 +14,3 @@ http:
       basicAuth:
         users:
           - '{{ env "DASH_CREDS" }}'
-certificatesResolvers:
-  myresolver:
-    acme:
-      email: '{{env "ECMA_EMAIL"}}'
-      storage: /letsencrypt/acme.json
-      httpChallenge:
-        entryPoint: web
