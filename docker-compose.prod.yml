@@ -7,9 +7,6 @@ services:
       - "80:80"
       - "443:443"
       - "8080"
-    # forced to use label because env vars dont work in static conf
-    labels:
-      - "traefik.certificatesresolvers.myresolver.acme.email=${ECMA_EMAIL}"
     environment:
       - DOMAIN=${DOMAIN}
       - ECMA_EMAIL=${ECMA_EMAIL}
