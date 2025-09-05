@@ -8,8 +8,6 @@ http:
         - websecure
       tls:
         certResolver: myresolver
-      middlewares:
-        - "basic-auth"
   middlewares:
     basic-auth:
       basicAuth:
