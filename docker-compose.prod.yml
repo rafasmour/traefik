@@ -7,11 +7,15 @@ services:
       - "80:80"
       - "443:443"
       - "8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.certificatesResolvers.myresolver.acme.email=${ECMA_EMAIL}"
+      - "traefik.certificatesResolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "traefik.certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web"
     environment:
       - DOMAIN=${DOMAIN}
       - ECMA_EMAIL=${ECMA_EMAIL}
       - DASH_CREDS=${DASH_CREDS}
-      - TRAEFIK_LOG_LEVEL="DEBUG"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.prod.yml:/etc/traefik/traefik.yaml:ro
